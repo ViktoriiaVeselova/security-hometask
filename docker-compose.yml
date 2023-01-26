@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  security-db:
+    restart: always
+    container_name: security-db
+    image:  postgres:14
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=security
+
+    volumes:
+        - ./postgres/data:/var/lib/postgresql/data
+        - ./src/main/resources/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+  hometask-security:
+    restart: on-failure
+    build: ./
+    image: spring-boot-hometask-security
+    container_name: hometask-security
+    expose:
+      - "8081"
+    ports:
+      - "8081:8081"
+
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://security-db:5432/security
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+    depends_on:
+      - security-db

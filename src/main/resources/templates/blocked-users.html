@@ -1,0 +1,23 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" layout:decorate="~{layout}"lang="en">
+<head>
+    <title>Info</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+        <div>
+            <h1>Blocked users:</h1>
+        </div>
+
+        <ul th:each="user : ${users}">
+            <li th:text="${user}"></li>
+        </ul>
+
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <a class="nav-link" th:href="@{/logout}">Logout</a>
+    </div>
+
+</body>
+</html>
